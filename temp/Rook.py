@@ -1,15 +1,26 @@
 from ChessPiece import ChessPiece
+import copy
 
 
-class Rock(ChessPiece):
+class Rook(ChessPiece):
     castling = True  # Пока ладья не походила, рокировка в ее сторону доступна
 
-    def __init__(self, colour, castling):
+    def __init__(self, colour, castling=True):
         super().__init__(colour)
         self.name = "R"
         self.castling = castling
 
     def possible_moves(self, board, p0, p1):
+        moves = self.possible_moves_2(board, p0, p1)
+        moves_2 = copy.deepcopy(moves)
+        for i, j in moves_2:
+            if board.will_be_no_check(p0, p1, i, j):
+                pass
+            else:
+                moves.remove([i, j])
+        return moves
+
+    def possible_moves_2(self, board, p0, p1):
         moves = []
         p0_ = p0
         p1_ = p1
@@ -52,3 +63,5 @@ class Rock(ChessPiece):
             else:
                 break
         return moves
+
+
